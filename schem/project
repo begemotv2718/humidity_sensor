@@ -1,0 +1,4 @@
+schematics mega-max.sch
+output-name mega-max
+m4-pcbdir /usr/share/pcb/m4
+elements-dir ../elements
