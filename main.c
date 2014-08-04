@@ -129,7 +129,7 @@ int main(){                         // The main function
 
   DDRC=0b00111110;
   init_display(15);
-  set_contrast(23,2);
+  set_contrast(18,1);
 
   while (1) {                        // Set up an infinite loop
     res=read_data(data);
@@ -151,7 +151,7 @@ int main(){                         // The main function
 
       putsxy(0,3,"                ");
       putsxy(0,3,"Влажность:");
-      humidity = data[0]*256+data[2];
+      humidity = data[0]*256+data[1];
       humidity_frac = humidity % 10;
       humidity = humidity/10;
       str_pos=0;
