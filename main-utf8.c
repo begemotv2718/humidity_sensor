@@ -135,7 +135,7 @@ int main(){                         // The main function
     res=read_data(data);
     if(res==0 && data[0]+data[1]+data[2]+data[3]== data[4]){
       putsxy(0,0,"                ");
-      putsxy(0,0,"Ù≈Õ–≈“¡‘’“¡:");
+      putsxy(0,0,"–¢–µ–º–ø–µ—Ä–∞—Ç—É—Ä–∞:");
       temperature = data[2]*256+data[3];
       temperature_frac = temperature % 10;
       temperature = temperature/10;
@@ -150,7 +150,7 @@ int main(){                         // The main function
       putsxy(0,2,"                ");
 
       putsxy(0,3,"                ");
-      putsxy(0,3,"˜Ã¡÷Œœ”‘ÿ:");
+      putsxy(0,3,"–í–ª–∞–∂–Ω–æ—Å—Ç—å:");
       humidity = data[0]*256+data[2];
       humidity_frac = humidity % 10;
       humidity = humidity/10;
