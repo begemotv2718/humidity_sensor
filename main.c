@@ -8,6 +8,26 @@
 #include <avr/sleep.h>
 #include <avr/interrupt.h>
 #include "display.h"
+#include "font.h"
+#include "koi5x8.h"
+
+font_descriptor font_koi5x8_1 = {
+  .charwidth = KOI5X8_1_CHARWIDTH,
+  .startchar = KOI5X8_1_STARTCHAR,
+  .endchar = KOI5X8_1_ENDCHAR,
+  .byteheight = 1,
+  .charheight = 8,
+  .font_ptr = font_koi5x8_data
+}; 
+
+font_descriptor font_koi5x8_2 = {
+  .charwidth = KOI5X8_2_CHARWIDTH,
+  .startchar = KOI5X8_2_STARTCHAR,
+  .endchar = KOI5X8_2_ENDCHAR,
+  .byteheight = 1,
+  .charheight = 8,
+  .font_ptr = font_koi5x8_2_data
+}; 
 
 /*read data from DHT22
  * Returns 0 on success, byte number with error otherwise
@@ -188,8 +208,8 @@ int main(void){                         // The main function
   while (1) {                        // Set up an infinite loop
     res=read_data(data);
     if(res==0 && data[0]+data[1]+data[2]+data[3]== data[4]){
-      putsxy(0,0,"                ");
-      putsxy(0,0,"Температура:");
+      putsxy(0,0,"                ",&font_koi5x8_1);
+      putsxy(0,0,"Температура",&font_koi5x8_2);
       temperature = data[2]*256+data[3];
       temperature_frac = temperature % 10;
       temperature = temperature/10;
@@ -198,13 +218,13 @@ int main(void){                         // The main function
       str_pos=print_str(str_pos,".",BUF_LEN,datastring);
       str_pos=print_digits_int(str_pos,temperature_frac,BUF_LEN,datastring);
       str_pos=print_str(str_pos,"C",BUF_LEN,datastring);
-      putsxy(0,1,"                ");
-      putsxy(0,1,datastring);
+      putsxy(0,1,"                ",&font_koi5x8_1);
+      putsxy(0,1,datastring,&font_koi5x8_1);
 
-      putsxy(0,2,"                ");
+      putsxy(0,2,"                ",&font_koi5x8_1);
 
-      putsxy(0,3,"                ");
-      putsxy(0,3,"Влажность:");
+      putsxy(0,3,"                ",&font_koi5x8_1);
+      putsxy(0,3,"Влажность",&font_koi5x8_2);
       humidity = data[0]*256+data[1];
       humidity_frac = humidity % 10;
       humidity = humidity/10;
@@ -213,15 +233,15 @@ int main(void){                         // The main function
       str_pos=print_str(str_pos,".",BUF_LEN,datastring);
       str_pos=print_digits_int(str_pos,humidity_frac,BUF_LEN,datastring);
       str_pos=print_str(str_pos,"%",BUF_LEN,datastring);
-      putsxy(0,4,"                ");
-      putsxy(0,4,datastring);
-      putsxy(0,5,"                ");
+      putsxy(0,4,"                ",&font_koi5x8_1);
+      putsxy(0,4,datastring,&font_koi5x8_1);
+      putsxy(0,5,"                ",&font_koi5x8_1);
     }else{
-      putsxy(0,0,"Error!          ");
+      putsxy(0,0,"Error!          ",&font_koi5x8_1);
       errstr[0]=res+'0';
       errstr[1]=0;
-      putsxy(0,1,"                ");
-      putsxy(0,1,errstr);
+      putsxy(0,1,"                ",&font_koi5x8_1);
+      putsxy(0,1,errstr,&font_koi5x8_1);
     }
     start_sleep();
   }
