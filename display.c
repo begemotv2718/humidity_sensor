@@ -112,11 +112,11 @@ void upload_box(uint8_t x, uint8_t y, uint8_t dx, uint8_t dy){
   }
 }  
 
-void putsxy(uint8_t x, uint8_t y, unsigned char *msg, font_descriptor *f1){
+int8_t putsxy(uint8_t x, uint8_t y, unsigned char *msg, font_descriptor *f1){
   uint8_t curx;
   curx=x;
-  if(y+f1->byteheight>DISP_YSIZE) return;
-  if(x>DISP_XSIZE) return;
+  if(y+f1->byteheight>=DISP_YSIZE) return(-1) ;
+  if(x>=DISP_XSIZE) return (-1);
   while(*msg){
     if(*msg>=f1->startchar && *msg<=f1->endchar){
       for(uint8_t i=0; i< f1->charwidth; i++){
@@ -132,4 +132,5 @@ void putsxy(uint8_t x, uint8_t y, unsigned char *msg, font_descriptor *f1){
   }
   upload_box(x,y,curx-x+1,f1->byteheight);
   BIT_SET(DISP_PORT,DISP_SCE);
+  return (int8_t)curx;
 }

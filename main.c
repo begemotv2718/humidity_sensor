@@ -164,6 +164,8 @@ void start_sleep(void){
 
 
 #define BUF_LEN 16    
+#define uchar unsigned char
+
 int main(void){                         // The main function
 
   DDRB=0b00000001;
@@ -190,39 +192,39 @@ int main(void){                         // The main function
   while (1) {                        // Set up an infinite loop
     res=read_data(data);
     if(res==0 && data[0]+data[1]+data[2]+data[3]== data[4]){
-      putsxy(0,0,"                ",&font_koi5x8_1);
-      putsxy(0,0,"Температура",&font_koi5x8_2);
+      putsxy(0,0,(uchar*)"                ",&font_koi5x8_1);
+      putsxy(0,0,(uchar*)"Температура",&font_koi5x8_2);
       temperature = data[2]*256+data[3];
       temperature_frac = temperature % 10;
       temperature = temperature/10;
       str_pos=0;
       str_pos=print_digits_int(str_pos,temperature,BUF_LEN,datastring);
-      str_pos=print_str(str_pos,".",BUF_LEN,datastring);
+      str_pos=print_str(str_pos,(uchar*)".",BUF_LEN,datastring);
       str_pos=print_digits_int(str_pos,temperature_frac,BUF_LEN,datastring);
-      str_pos=print_str(str_pos,"C",BUF_LEN,datastring);
-      putsxy(0,1,"                ",&font_koi5x8_1);
+      str_pos=print_str(str_pos,(uchar*)"C",BUF_LEN,datastring);
+      putsxy(0,1,(uchar*)"                ",&font_koi5x8_1);
       putsxy(0,1,datastring,&font_koi5x8_1);
 
-      putsxy(0,2,"                ",&font_koi5x8_1);
+      putsxy(0,2,(uchar*)"                ",&font_koi5x8_1);
 
-      putsxy(0,3,"                ",&font_koi5x8_1);
-      putsxy(0,3,"Влажность",&font_koi5x8_2);
+      putsxy(0,3,(uchar*)"                ",&font_koi5x8_1);
+      putsxy(0,3,(uchar*)"Влажность",&font_koi5x8_2);
       humidity = data[0]*256+data[1];
       humidity_frac = humidity % 10;
       humidity = humidity/10;
       str_pos=0;
       str_pos=print_digits_int(str_pos,humidity,BUF_LEN,datastring);
-      str_pos=print_str(str_pos,".",BUF_LEN,datastring);
+      str_pos=print_str(str_pos,(uchar*)".",BUF_LEN,datastring);
       str_pos=print_digits_int(str_pos,humidity_frac,BUF_LEN,datastring);
-      str_pos=print_str(str_pos,"%",BUF_LEN,datastring);
-      putsxy(0,4,"                ",&font_koi5x8_1);
+      str_pos=print_str(str_pos,(uchar*)"%",BUF_LEN,datastring);
+      putsxy(0,4,(uchar*)"                ",&font_koi5x8_1);
       putsxy(0,4,datastring,&font_koi5x8_1);
-      putsxy(0,5,"                ",&font_koi5x8_1);
+      putsxy(0,5,(uchar*)"                ",&font_koi5x8_1);
     }else{
-      putsxy(0,0,"Error!          ",&font_koi5x8_1);
+      putsxy(0,0,(uchar*)"Error!          ",&font_koi5x8_1);
       errstr[0]=res+'0';
       errstr[1]=0;
-      putsxy(0,1,"                ",&font_koi5x8_1);
+      putsxy(0,1,(uchar*)"                ",&font_koi5x8_1);
       putsxy(0,1,errstr,&font_koi5x8_1);
     }
     start_sleep();
