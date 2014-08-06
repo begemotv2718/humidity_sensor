@@ -127,9 +127,9 @@ void start_timer1(void){
   TCNT1=0x0000; 
   
   /*  
-   * Prescaler 1:1024
+   * Prescaler 1:256
    */
-  TCCR1B = 0x05;
+  TCCR1B = 0x04;
   
   /* Enable the timer overlow interrupt. */
   TIMSK |= 1<<TOIE1;
@@ -147,7 +147,7 @@ void stop_timer1(void){
 void start_sleep(void){
 
   start_timer1();
-  set_sleep_mode(SLEEP_MODE_IDLE);
+  set_sleep_mode(SLEEP_MODE_IDLE); //consider SLEEP_MODE_PWR_DOWN and WDT timer
   
   sleep_enable();
 
@@ -183,6 +183,7 @@ int main(void){                         // The main function
   init_display(15);
   set_contrast(18,1);
   stop_timer1();
+  sei();
 
   while (1) {                        // Set up an infinite loop
     res=read_data(data);
