@@ -103,8 +103,8 @@ void set_contrast(uint8_t vop, uint8_t bias){
 
 void upload_box(uint8_t x, uint8_t y, uint8_t dx, uint8_t dy){ 
   uint8_t i,j;
-  send_byte(DISP_SETYADDR |y , DISP_COMMAND);
   for(j=y; (j<y+dy && j<DISP_YSIZE); j++){
+    send_byte(DISP_SETYADDR |j , DISP_COMMAND);
     send_byte(DISP_SETXADDR |x , DISP_COMMAND);
     for(i=x;i<x+dx;i++){
       send_byte(data[j*DISP_XSIZE+i], DISP_DATA);
@@ -115,13 +115,13 @@ void upload_box(uint8_t x, uint8_t y, uint8_t dx, uint8_t dy){
 int8_t putsxy(uint8_t x, uint8_t y, unsigned char *msg, font_descriptor *f1){
   uint8_t curx;
   curx=x;
-  if(y+f1->byteheight>=DISP_YSIZE) return(-1) ;
+  if(y+f1->byteheight>DISP_YSIZE) return(-1) ;
   if(x>=DISP_XSIZE) return (-1);
   while(*msg){
     if(*msg>=f1->startchar && *msg<=f1->endchar){
       for(uint8_t i=0; i< f1->charwidth; i++){
         for(uint8_t j=0; j<f1->byteheight; j++){
-          data[(y+j)*DISP_XSIZE+curx]=pgm_read_byte(&f1->font_ptr[((*msg-f1->startchar)*f1->charwidth+i)*f1->byteheight+j]);
+          data[(y+j)*DISP_XSIZE+curx]=pgm_read_byte(&f1->font_ptr[((*msg-f1->startchar)*f1->byteheight+j)*f1->charwidth+i]);
         }
         curx++;
         if(curx>DISP_XSIZE) break;

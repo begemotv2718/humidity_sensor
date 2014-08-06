@@ -9,6 +9,7 @@
 #include <avr/interrupt.h>
 #include "display.h"
 #include "koi5x8.h"
+#include "koi8x16b.h"
 
 
 /*read data from DHT22
@@ -202,10 +203,10 @@ int main(void){                         // The main function
       str_pos=print_str(str_pos,(uchar*)".",BUF_LEN,datastring);
       str_pos=print_digits_int(str_pos,temperature_frac,BUF_LEN,datastring);
       str_pos=print_str(str_pos,(uchar*)"C",BUF_LEN,datastring);
-      putsxy(0,1,(uchar*)"                ",&font_koi5x8_1);
-      putsxy(0,1,datastring,&font_koi5x8_1);
+      putsxy(0,1,(uchar*)"                ",&font_koi8x16b_1);
+      putsxy(0,1,datastring,&font_koi8x16b_1);
 
-      putsxy(0,2,(uchar*)"                ",&font_koi5x8_1);
+      //putsxy(0,2,(uchar*)"                ",&font_koi5x8_1);
 
       putsxy(0,3,(uchar*)"                ",&font_koi5x8_1);
       putsxy(0,3,(uchar*)"Влажность",&font_koi5x8_2);
@@ -217,9 +218,8 @@ int main(void){                         // The main function
       str_pos=print_str(str_pos,(uchar*)".",BUF_LEN,datastring);
       str_pos=print_digits_int(str_pos,humidity_frac,BUF_LEN,datastring);
       str_pos=print_str(str_pos,(uchar*)"%",BUF_LEN,datastring);
-      putsxy(0,4,(uchar*)"                ",&font_koi5x8_1);
-      putsxy(0,4,datastring,&font_koi5x8_1);
-      putsxy(0,5,(uchar*)"                ",&font_koi5x8_1);
+      putsxy(0,4,(uchar*)"                ",&font_koi8x16b_1);
+      putsxy(0,4,datastring,&font_koi8x16b_1);
     }else{
       putsxy(0,0,(uchar*)"Error!          ",&font_koi5x8_1);
       errstr[0]=res+'0';
