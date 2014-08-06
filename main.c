@@ -8,26 +8,8 @@
 #include <avr/sleep.h>
 #include <avr/interrupt.h>
 #include "display.h"
-#include "font.h"
 #include "koi5x8.h"
 
-font_descriptor font_koi5x8_1 = {
-  .charwidth = KOI5X8_1_CHARWIDTH,
-  .startchar = KOI5X8_1_STARTCHAR,
-  .endchar = KOI5X8_1_ENDCHAR,
-  .byteheight = 1,
-  .charheight = 8,
-  .font_ptr = font_koi5x8_data
-}; 
-
-font_descriptor font_koi5x8_2 = {
-  .charwidth = KOI5X8_2_CHARWIDTH,
-  .startchar = KOI5X8_2_STARTCHAR,
-  .endchar = KOI5X8_2_ENDCHAR,
-  .byteheight = 1,
-  .charheight = 8,
-  .font_ptr = font_koi5x8_2_data
-}; 
 
 /*read data from DHT22
  * Returns 0 on success, byte number with error otherwise

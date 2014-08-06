@@ -1,4 +1,7 @@
 #include <avr/pgmspace.h>
+#include "font.h"
+
+
 PROGMEM const char font_koi5x8_data[] = {
 0x00,0x00,0x00,0x00,0x00,
 0x00,0x00,0x5e,0x00,0x00,
@@ -97,9 +100,15 @@ PROGMEM const char font_koi5x8_data[] = {
 0x04,0x02,0x04,0x02,0x00,
 };
 
-#define KOI5X8_1_CHARWIDTH 5
-#define KOI5X8_1_STARTCHAR 0x20
-#define KOI5X8_1_ENDCHAR 0x7E
+font_descriptor font_koi5x8_1 = {
+  .charwidth = 5,
+  .startchar = 0x20,
+  .endchar =   0x7E,
+  .byteheight = 1,
+  .charheight = 8,
+  .font_ptr = font_koi5x8_data
+}; 
+
 
 PROGMEM const char font_koi5x8_2_data[] = {
 0x78,0x30,0x48,0x30,0x00,
@@ -167,6 +176,12 @@ PROGMEM const char font_koi5x8_2_data[] = {
 0x00,0x0e,0x10,0x7e,0x00,
 0x02,0x02,0x7e,0x48,0x30
 };
-#define KOI5X8_2_CHARWIDTH 5
-#define KOI5X8_2_STARTCHAR 0xC0
-#define KOI5X8_2_ENDCHAR 0xFF
+
+font_descriptor font_koi5x8_2 = {
+  .charwidth = 5,
+  .startchar = 0xC0,
+  .endchar = 0xFF,
+  .byteheight = 1,
+  .charheight = 8,
+  .font_ptr = font_koi5x8_2_data
+}; 
