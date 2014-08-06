@@ -4,9 +4,15 @@
 #include <inttypes.h>
 #include <avr/io.h>
 #include <util/delay.h>
+#include <avr/power.h>
+#include <avr/sleep.h>
+#include <avr/interrupt.h>
 #include "display.h"
 
-  
+/*read data from DHT22
+ * Returns 0 on success, byte number with error otherwise
+ * result should be at least 5 bytes long
+ * */  
 int read_data(unsigned char* result){
   unsigned char i;
   DDRB=0b00000001;
@@ -47,7 +53,7 @@ int read_data(unsigned char* result){
   return 0;
 }
 
-unsigned char print_digits(unsigned char x, unsigned char *str){
+unsigned char print_digits_uchar(unsigned char x, unsigned char *str){
   unsigned char cur_digit;
   unsigned char str_pos;
   str_pos=0;
@@ -109,8 +115,54 @@ unsigned char print_str(unsigned char str_pos, unsigned char *source, unsigned c
   return(str_pos);
 }
 
+EMPTY_INTERRUPT(TIMER1_OVF_vect)
+
+
+/*setup watchdog timer*/
+void start_timer1(void){
+
+  /* Normal timer operation.*/
+  TCCR1A = 0x00; 
+  
+  TCNT1=0x0000; 
+  
+  /*  
+   * Prescaler 1:1024
+   */
+  TCCR1B = 0x05;
+  
+  /* Enable the timer overlow interrupt. */
+  TIMSK |= 1<<TOIE1;
+}
+
+void stop_timer1(void){
+  TCNT1=0x0000;
+
+  /*disconnect timer source*/
+  TCCR1B=0x00;
+  /*disable interrupt*/
+  TIMSK &= ~(1<<TOIE1);
+}
+
+void start_sleep(void){
+
+  start_timer1();
+  set_sleep_mode(SLEEP_MODE_IDLE);
+  
+  sleep_enable();
+
+  
+  sleep_mode();
+
+  sleep_disable();
+  stop_timer1();
+
+}
+
+
+
 #define BUF_LEN 16    
-int main(){                         // The main function
+int main(void){                         // The main function
 
   DDRB=0b00000001;
   PORTB=1;
@@ -130,6 +182,7 @@ int main(){                         // The main function
   DDRC=0b00111110;
   init_display(15);
   set_contrast(18,1);
+  stop_timer1();
 
   while (1) {                        // Set up an infinite loop
     res=read_data(data);
@@ -169,7 +222,7 @@ int main(){                         // The main function
       putsxy(0,1,"                ");
       putsxy(0,1,errstr);
     }
-    _delay_ms(3000);
+    start_sleep();
   }
 }
 
