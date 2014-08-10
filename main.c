@@ -11,6 +11,7 @@
 #include "koi5x8.h"
 #include "koi8x16b.h"
 
+#define uchar unsigned char
 
 /*read data from DHT22
  * Returns 0 on success, byte number with error otherwise
@@ -118,39 +119,24 @@ unsigned char print_str(unsigned char str_pos, unsigned char *source, unsigned c
   return(str_pos);
 }
 
-EMPTY_INTERRUPT(TIMER1_OVF_vect)
+EMPTY_INTERRUPT(TIMER2_OVF_vect);
 
-
-/*setup watchdog timer*/
-void start_timer1(void){
-
-  /* Normal timer operation.*/
-  TCCR1A = 0x00; 
-  
-  TCNT1=0x0000; 
-  
-  /*  
-   * Prescaler 1:256
-   */
-  TCCR1B = 0x04;
-  
-  /* Enable the timer overlow interrupt. */
-  TIMSK |= 1<<TOIE1;
+void setup_timer2(void){
+  _delay_ms(500);
+  TIMSK &= ~(1<<TOIE2);
+  ASSR |=  (1<<AS2);
+  TCCR2 = 0x07; // clc_AS/1024
+  TCNT2 = 0x00; 
+  while(ASSR & ((1<<TCR2UB)|(1<<TCN2UB)|(1<<OCR2UB)));
+  //wait until timer starts
+  TIMSK |= (1<<TOIE2); //timer 2 overflow interrupt
 }
 
-void stop_timer1(void){
-  TCNT1=0x0000;
 
-  /*disconnect timer source*/
-  TCCR1B=0x00;
-  /*disable interrupt*/
-  TIMSK &= ~(1<<TOIE1);
-}
 
 void start_sleep(void){
 
-  start_timer1();
-  set_sleep_mode(SLEEP_MODE_IDLE); //consider SLEEP_MODE_PWR_DOWN and WDT timer
+  set_sleep_mode(SLEEP_MODE_PWR_SAVE); //consider SLEEP_MODE_PWR_DOWN and WDT timer
   
   sleep_enable();
 
@@ -158,14 +144,12 @@ void start_sleep(void){
   sleep_mode();
 
   sleep_disable();
-  stop_timer1();
 
 }
 
 
 
 #define BUF_LEN 16    
-#define uchar unsigned char
 
 int main(void){                         // The main function
 
@@ -187,7 +171,7 @@ int main(void){                         // The main function
   DDRC=0b00111110;
   init_display(15);
   set_contrast(18,1);
-  stop_timer1();
+  setup_timer2();
   sei();
 
   while (1) {                        // Set up an infinite loop
